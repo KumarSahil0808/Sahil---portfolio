@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sahil Kumar | CSE Student Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        dark: '#0f172a',
+                        card: '#1e293b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090a0f; /* Fallback for canvas */
+            color: #f8fafc;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Star Background Canvas */
+        #star-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        /* 3D Tilt Container Styles */
+        .perspective-container {
+            perspective: 1000px;
+        }
+        
+        #hero-image {
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out; /* Smooth follow */
+        }
+    </style>
+</head>
+<body class="relative overflow-x-hidden">
+
+    <!-- Canvas for Stars -->
+    <canvas id="star-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 start-0 border-b border-gray-800 bg-dark/80 backdrop-blur-md">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <span class="self-center text-2xl font-bold whitespace-nowrap text-white">Sahil<span class="text-primary">.dev</span></span>
+            </a>
+            <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false" id="menu-toggle">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                </svg>
+            </button>
+            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+                <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-700 rounded-lg bg-gray-800 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent">
+                    <li>
+                        <a href="#home" class="block py-2 px-3 text-white bg-primary rounded md:bg-transparent md:text-primary md:p-0" aria-current="page">Home</a>
+                    </li>
+                    <li>
+                        <a href="#about" class="block py-2 px-3 text-gray-300 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-primary md:p-0">About</a>
+                    </li>
+                    <li>
+                        <a href="#skills" class="block py-2 px-3 text-gray-300 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-primary md:p-0">Skills</a>
+                    </li>
+                    <li>
+                        <a href="#projects" class="block py-2 px-3 text-gray-300 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-primary md:p-0">Projects</a>
+                    </li>
+                    <li>
+                        <a href="#contact" class="block py-2 px-3 text-gray-300 rounded hover:bg-gray-700 md:hover:bg-transparent md:hover:text-primary md:p-0">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center pt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col-reverse md:flex-row items-center">
+            <div class="w-full md:w-1/2 text-center md:text-left mt-10 md:mt-0">
+                <h2 class="text-sm font-semibold text-primary uppercase tracking-widest mb-2">Welcome to my world</h2>
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Sahil Kumar</span></h1>
+                <h2 class="text-2xl md:text-3xl font-semibold text-gray-400 mb-6">
+                    I am a <span id="typewriter" class="text-white"></span><span class="animate-pulse">|</span>
+                </h2>
+                <p class="text-gray-400 mb-8 text-lg max-w-lg mx-auto md:mx-0">
+                    Passionate Computer Science Engineering student dedicated to building modern, scalable, and user-centric web applications.
+                </p>
+                <div class="flex space-x-4 justify-center md:justify-start">
+                    <a href="#projects" class="px-8 py-3 bg-gradient-to-r from-primary to-secondary rounded-full font-bold text-white shadow-lg hover:shadow-primary/50 transition transform hover:-translate-y-1">View Work</a>
+                    <a href="#contact" class="px-8 py-3 border border-gray-600 rounded-full font-bold text-gray-300 hover:bg-gray-800 transition">Contact Me</a>
+                </div>
+                <div class="mt-8 flex space-x-6 justify-center md:justify-start">
+                    <a href="https://github.com/KumarSahil0808" target="_blank" class="text-gray-400 hover:text-white text-2xl transition"><i class="fab fa-github"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 text-2xl transition"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-300 text-2xl transition"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/kumar_sahil_0008?igsh=MXcwbDI1emtmeWRqdg==" target="_blank" class="text-gray-400 hover:text-pink-500 text-2xl transition"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            
+            <!-- 3D Photo / Avatar Section -->
+            <div class="w-full md:w-1/2 flex justify-center relative perspective-container">
+                <div id="hero-image" class="relative w-72 h-72 md:w-96 md:h-96 cursor-pointer">
+                    <!-- Background Glow Effect (Parallax Layer 1) -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full blur-3xl opacity-40 animate-pulse -z-10 transition-transform duration-100 ease-out" style="transform: translateZ(-50px);"></div>
+                    
+                    <!-- 3D Avatar Image (Parallax Layer 2) -->
+                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Technologist.png" 
+                         alt="Sahil 3D Avatar" 
+                         class="relative w-full h-full object-contain drop-shadow-2xl transition-transform duration-100 ease-out"
+                         style="transform: translateZ(50px);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">About <span class="text-primary">Me</span></h2>
+                <div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="glass-card p-8 rounded-2xl">
+                   <p class="text-gray-300 leading-relaxed mb-6">
+                       Hello! I'm Sahil Kumar, currently pursuing my B.Tech in Computer Science and Engineering. I have a strong foundation in programming logic and a keen interest in Full Stack Development.
+                   </p>
+                   <p class="text-gray-300 leading-relaxed mb-6">
+                       I enjoy solving complex problems and turning ideas into reality through code. Whether it's building a responsive website or developing a backend API, I'm always eager to learn new technologies and improve my skills.
+                   </p>
+                   <div class="grid grid-cols-2 gap-4 text-center">
+                       <div class="p-4 bg-gray-800 rounded-xl">
+                           <h3 class="text-3xl font-bold text-primary">10+</h3>
+                           <p class="text-sm text-gray-400">Projects Completed</p>
+                       </div>
+                       <div class="p-4 bg-gray-800 rounded-xl">
+                           <h3 class="text-3xl font-bold text-secondary">03+</h3>
+                           <p class="text-sm text-gray-400">Years Coding</p>
+                       </div>
+                   </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-white mb-6">Education</h3>
+                    
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold border border-primary">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-xl font-bold text-white">Bachelor of Technology (CSE)</h4>
+                            <p class="text-gray-400">Your University Name</p>
+                            <p class="text-sm text-gray-500">2021 - 2025 (Present)</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center text-secondary font-bold border border-secondary">
+                            <i class="fas fa-school"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-xl font-bold text-white">Higher Secondary</h4>
+                            <p class="text-gray-400">Your School Name</p>
+                            <p class="text-sm text-gray-500">2019 - 2021</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">My <span class="text-secondary">Skills</span></h2>
+                <div class="w-20 h-1 bg-secondary mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                <!-- Skill Item -->
+                <div class="glass-card p-6 rounded-xl flex flex-col items-center justify-center gap-4 group cursor-pointer">
+                    <i class="fab fa-html5 text-5xl text-orange-500 group-hover:scale-110 transition"></i>
+                    <span class="font-semibold text-gray-300">HTML5</span>
+                </div>
+                <!-- Skill Item -->
+                <div class="glass-card p-6 rounded-xl flex flex-col items-center justify-center gap-4 group cursor-pointer">
+                    <i class="fab fa-css3-alt text-5xl text-blue-500 group-hover:scale-110 transition"></i>
+                    <span class="font-semibold text-gray-300">CSS3</span>
+                </div>
+                <!-- Skill Item -->
+                <div class="glass-card p-6 rounded-xl flex flex-col items-center justify-center gap-4 group cursor-pointer">
+                    <i class="fab fa-js text-5xl text-yellow-400 group-hover:scale-110 transition"></i>
+                    <span class="font-semibold text-gray-300">JavaScript</span>
+                </div>
+                <!-- Skill Item -->
+                <div class="glass-card p-6 rounded-xl flex flex-col items-center justify-center gap-4 group cursor-pointer">
+                    <i class="fab fa-react text-5xl text-cyan-400 group-hover:scale-110 transition"></i>
+                    <span class="font-semibold text-gray-300">React</span>
+                </div>
+                 <!-- Skill Item -->
+                 <div class="glass-card p-6 rounded-xl flex flex-col items-center justify-center gap-4 group cursor-pointer">
+                    <i class="fab fa-node text-5xl text-green-500 group-hover:scale-110 transition"></i>
+                    <span class="font-semibold text-gray-300">Node.js</span>
+                </div>
+                <!-- Skill Item -->
+                <div class="glass-card p-6 rounded-xl flex flex-col items-center justify-center gap-4 group cursor-pointer">
+                    <i class="fab fa-python text-5xl text-blue-300 group-hover:scale-110 transition"></i>
+                    <span class="font-semibold text-gray-300">Python</span>
+                </div>
+                 <!-- Skill Item -->
+                 <div class="glass-card p-6 rounded-xl flex flex-col items-center justify-center gap-4 group cursor-pointer">
+                    <i class="fab fa-java text-5xl text-red-500 group-hover:scale-110 transition"></i>
+                    <span class="font-semibold text-gray-300">Java</span>
+                </div>
+                <!-- Skill Item -->
+                <div class="glass-card p-6 rounded-xl flex flex-col items-center justify-center gap-4 group cursor-pointer">
+                    <i class="fas fa-database text-5xl text-purple-400 group-hover:scale-110 transition"></i>
+                    <span class="font-semibold text-gray-300">SQL</span>
+                </div>
+                 <!-- Skill Item -->
+                 <div class="glass-card p-6 rounded-xl flex flex-col items-center justify-center gap-4 group cursor-pointer">
+                    <i class="fab fa-git-alt text-5xl text-orange-600 group-hover:scale-110 transition"></i>
+                    <span class="font-semibold text-gray-300">Git</span>
+                </div>
+                 <!-- Skill Item -->
+                 <div class="glass-card p-6 rounded-xl flex flex-col items-center justify-center gap-4 group cursor-pointer">
+                    <i class="fas fa-code text-5xl text-gray-400 group-hover:scale-110 transition"></i>
+                    <span class="font-semibold text-gray-300">C++</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-gray-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Latest <span class="text-primary">Projects</span></h2>
+                <div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Card 1 -->
+                <div class="glass-card rounded-2xl overflow-hidden group">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="https://images.unsplash.com/photo-1557821552-17105176677c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Project 1" class="w-full h-full object-cover transition transform group-hover:scale-110 duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center space-x-4">
+                            <a href="#" class="p-3 bg-white rounded-full text-dark hover:text-primary transition"><i class="fab fa-github"></i></a>
+                            <a href="#" class="p-3 bg-white rounded-full text-dark hover:text-primary transition"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">E-Commerce Platform</h3>
+                        <p class="text-gray-400 text-sm mb-4">A full-featured online store built with React and Node.js with payment integration.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-primary/20 text-primary text-xs rounded-full">React</span>
+                            <span class="px-3 py-1 bg-primary/20 text-primary text-xs rounded-full">Node.js</span>
+                            <span class="px-3 py-1 bg-primary/20 text-primary text-xs rounded-full">MongoDB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="glass-card rounded-2xl overflow-hidden group">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Project 2" class="w-full h-full object-cover transition transform group-hover:scale-110 duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center space-x-4">
+                            <a href="#" class="p-3 bg-white rounded-full text-dark hover:text-primary transition"><i class="fab fa-github"></i></a>
+                            <a href="#" class="p-3 bg-white rounded-full text-dark hover:text-primary transition"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Weather Dashboard</h3>
+                        <p class="text-gray-400 text-sm mb-4">Real-time weather application using OpenWeather API with location detection.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-secondary/20 text-secondary text-xs rounded-full">JavaScript</span>
+                            <span class="px-3 py-1 bg-secondary/20 text-secondary text-xs rounded-full">API</span>
+                            <span class="px-3 py-1 bg-secondary/20 text-secondary text-xs rounded-full">CSS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="glass-card rounded-2xl overflow-hidden group">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Project 3" class="w-full h-full object-cover transition transform group-hover:scale-110 duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center space-x-4">
+                            <a href="#" class="p-3 bg-white rounded-full text-dark hover:text-primary transition"><i class="fab fa-github"></i></a>
+                            <a href="#" class="p-3 bg-white rounded-full text-dark hover:text-primary transition"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Task Management App</h3>
+                        <p class="text-gray-400 text-sm mb-4">A productivity tool to manage daily tasks with drag-and-drop functionality.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-pink-500/20 text-pink-400 text-xs rounded-full">Vue.js</span>
+                            <span class="px-3 py-1 bg-pink-500/20 text-pink-400 text-xs rounded-full">Firebase</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Get In <span class="text-primary">Touch</span></h2>
+                <div class="w-20 h-1 bg-primary mx-auto rounded-full mb-6"></div>
+                <p class="text-gray-400">Have a project in mind or just want to say hi? Feel free to send me a message.</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl">
+                <form class="space-y-6" onsubmit="event.preventDefault(); alert('Message sent successfully!');">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Name</label>
+                            <input type="text" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-primary text-white" placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                            <input type="email" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-primary text-white" placeholder="john@example.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Subject</label>
+                        <input type="text" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-primary text-white" placeholder="Project Inquiry">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Message</label>
+                        <textarea rows="4" class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-primary text-white" placeholder="Your message here..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-primary to-secondary rounded-lg font-bold text-white hover:opacity-90 transition transform hover:scale-[1.01]">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark border-t border-gray-800 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="text-2xl font-bold text-white">Sahil<span class="text-primary">.dev</span></span>
+            </div>
+            <div class="text-gray-500 text-sm">
+                &copy; 2024 Sahil Kumar. All rights reserved.
+            </div>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="https://github.com/KumarSahil0808" target="_blank" class="text-gray-400 hover:text-white transition"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/kumar_sahil_0008?igsh=MXcwbDI1emtmeWRqdg==" target="_blank" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Typewriter Effect
+        const textElement = document.getElementById('typewriter');
+        const texts = ['CSE Student', 'Web Developer', 'Tech Enthusiast'];
+        let count = 0;
+        let index = 0;
+        let currentText = '';
+        let letter = '';
+
+        (function type() {
+            if (count === texts.length) {
+                count = 0;
+            }
+            currentText = texts[count];
+            letter = currentText.slice(0, ++index);
+
+            textElement.textContent = letter;
+            if (letter.length === currentText.length) {
+                count++;
+                index = 0;
+                setTimeout(type, 2000); // Wait before next word
+            } else {
+                setTimeout(type, 100);
+            }
+        }());
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navbar = document.getElementById('navbar-sticky');
+        
+        menuToggle.addEventListener('click', () => {
+            navbar.classList.toggle('hidden');
+        });
+
+        // Close menu when clicking a link (mobile)
+        document.querySelectorAll('#navbar-sticky a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (!navbar.classList.contains('hidden')) {
+                    navbar.classList.add('hidden');
+                }
+            });
+        });
+
+        // 3D Tilt Effect for Hero Image
+        const container = document.querySelector('.perspective-container');
+        const heroImage = document.getElementById('hero-image');
+        
+        if(container && heroImage) {
+            container.addEventListener('mousemove', (e) => {
+                const { left, top, width, height } = container.getBoundingClientRect();
+                const x = (e.clientX - left - width / 2) / 20;
+                const y = (e.clientY - top - height / 2) / 20;
+                heroImage.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+            });
+
+            container.addEventListener('mouseleave', () => {
+                heroImage.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            });
+        }
+
+        // --- Star Background Animation ---
+        const canvas = document.getElementById('star-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let stars = [];
+        let mouseX = 0;
+        let mouseY = 0;
+
+        function initStars() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            
+            stars = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2,
+                    // Closer stars (larger size) move faster
+                    speed: Math.random() * 0.5 + 0.1,
+                    offsetX: 0,
+                    offsetY: 0
+                });
+            }
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            // Normalize mouse position (-1 to 1) relative to center
+            mouseX = (e.clientX - width / 2) / (width / 2);
+            mouseY = (e.clientY - height / 2) / (height / 2);
+        });
+
+        function animateStars() {
+            ctx.clearRect(0, 0, width, height);
+            
+            ctx.fillStyle = 'white';
+            stars.forEach(star => {
+                // Parallax logic: Move stars opposite to mouse
+                const targetX = -mouseX * 40 * star.speed;
+                const targetY = -mouseY * 40 * star.speed;
+                
+                // Smoothly interpolate current offset to target offset
+                star.offsetX += (targetX - star.offsetX) * 0.05;
+                star.offsetY += (targetY - star.offsetY) * 0.05;
+
+                const x = star.x + star.offsetX;
+                const y = star.y + star.offsetY;
+
+                // Draw star
+                ctx.globalAlpha = Math.random() * 0.5 + 0.5; // Subtle twinkle
+                ctx.beginPath();
+                ctx.arc(x, y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            requestAnimationFrame(animateStars);
+        }
+
+        window.addEventListener('resize', initStars);
+        initStars();
+        animateStars();
+    </script>
+</body>
+</html>
